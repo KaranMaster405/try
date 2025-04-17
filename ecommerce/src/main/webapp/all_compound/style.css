@@ -1,0 +1,37 @@
+* {
+            margin: 0;
+            padding: 0;
+
+            font-family: "Playwrite US Modern", pointer;
+            font-optical-sizing: auto;
+            font-weight: 100px;
+            font-style: normal;
+box-sizing: border-box;
+        }
+
+        .top ul {
+			background-color: black;
+            width: 100%;
+          color: white;
+            display:flex;
+            justify-content: right;
+        }
+
+        .top ul li {
+			text-color: white;
+            list-style: none;
+            margin: 0 2vh;
+
+        }
+ .navbar .nav-item:hover .nav-link
+       {
+		   background-color: #303f9f;
+		   color:white;
+		  border-radius: 4px;
+		  resize: 1.5px;
+	   }
+ carousel.carousel-inner.carousel-item
+ {
+	 width:100%;
+	 height:20%;
+ }

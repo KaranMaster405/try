@@ -1,0 +1,12 @@
+127.0.0.1 - - [20/Mar/2025:09:42:56 +0530] "GET / HTTP/1.1" 404 751
+0:0:0:0:0:0:0:1 - - [20/Mar/2025:09:42:59 +0530] "GET /ecommerce/ HTTP/1.1" 200 16996
+0:0:0:0:0:0:0:1 - - [20/Mar/2025:09:42:59 +0530] "GET /ecommerce/style.css HTTP/1.1" 404 774
+0:0:0:0:0:0:0:1 - - [20/Mar/2025:09:42:59 +0530] "GET /ecommerce/book/avenger.webp HTTP/1.1" 304 -
+0:0:0:0:0:0:0:1 - - [20/Mar/2025:09:42:59 +0530] "GET /ecommerce/book/ho.jfif HTTP/1.1" 304 -
+0:0:0:0:0:0:0:1 - - [20/Mar/2025:09:42:59 +0530] "GET /ecommerce/book/codeing.jpg HTTP/1.1" 304 -
+0:0:0:0:0:0:0:1 - - [20/Mar/2025:09:42:59 +0530] "GET /favicon.ico HTTP/1.1" 404 762
+127.0.0.1 - - [20/Mar/2025:11:03:12 +0530] "GET / HTTP/1.1" 404 751
+0:0:0:0:0:0:0:1 - - [20/Mar/2025:11:03:13 +0530] "GET /ecommerce/index.jsp HTTP/1.1" 200 16996
+0:0:0:0:0:0:0:1 - - [20/Mar/2025:11:03:13 +0530] "GET /ecommerce/style.css HTTP/1.1" 404 774
+0:0:0:0:0:0:0:1 - - [20/Mar/2025:11:03:16 +0530] "GET /ecommerce/view_Books.jsp?bid=38&stock=2 HTTP/1.1" 200 10774
+0:0:0:0:0:0:0:1 - - [20/Mar/2025:11:03:16 +0530] "GET /ecommerce/style.css HTTP/1.1" 404 774

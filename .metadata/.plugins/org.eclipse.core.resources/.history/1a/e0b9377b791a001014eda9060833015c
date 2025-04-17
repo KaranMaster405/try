@@ -1,0 +1,290 @@
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1" import="com.DAO.BookDAOImpl,com.entity.BookDtls,com.DB.DBConnect,java.util.List,com.DAO.*,com.DAO.CartDAO,com.entity.*" %>
+	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+       <%@page isELIgnored="false" %>
+      
+       
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<%@include file="all_compound/allcss.jsp" %>
+<style>
+.{
+	height:50vh;
+	width:100%;
+	
+}
+ 
+.container-fluid
+{
+
+justify-content: center;
+align-items: center;
+
+}
+.amu
+{
+padding-left:20vw;
+}
+</style>
+</head>
+<body style="background-color:#f0f1f2;">
+<section class="first">
+<div class="top">
+<ul>
+<li>
+<h6>Find store</h6></li>
+<li><h6>|</h6></li>
+<li><h6>91+8879482453</h6></li>
+</ul>
+</div>
+</section>
+
+<%@include file="all_compound/navbar.jsp" %>
+<c:if test="${empty userobj }">
+<c:redirect url="login.jsp"></c:redirect>
+</c:if>
+
+<c:if test="${not empty succMsg}">
+<div class="alert alert-success" role="alert">
+  ${succMsg}
+</div>
+<c:remove var="succMsg" scope="session"/>
+
+</c:if>
+
+<c:if test="${not empty failedMsg}">
+<div class="alert alert-danger text-center" role="alert">
+ ${failedMsg}
+</div>
+<c:remove var="failedMsg" scope="session"/>
+
+</c:if>
+
+<div class="amu">
+<div class="container-fluid ">
+<div class="col p-2">
+
+<div class="col-md-9">   <!--   col md change karne par background white apni full spav=ce -->
+<div class="card">
+<div class="card-body">
+
+<form action="order" method="post">
+
+<div class="col">
+ 
+<div class="card bg-white">
+<h3 class="text-center text-danger">Your Selected items</h3>
+<div class="card-body">
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Book Name</th>
+      <th scope="col">Author</th>
+       <th scope="col">Quantity</th>
+      <th scope="col">Price</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+  
+  <%
+  User u=(User)session.getAttribute("userobj");
+  BookOrderImpl b=new BookOrderImpl(DBConnect.getconn());
+  CartDAOImpl dao=new CartDAOImpl(DBConnect.getconn());
+  List<Cart> cart= dao.getBookByUser(u.getId());
+  Double totalPrice=0.00;
+ 
+  for(Cart c :cart)
+	 
+ 
+  {
+   totalPrice=c.getTotalPrice();%>
+   <tr>
+      <th scope="row"><%=c.getBookName()%></th>
+      
+      <td><%=c.getAuthor()%></td>
+    <td>
+  <input type="hidden" name="bid" value="<%=c.getBid()%>">
+  <div class="quantity-control" style="display: flex; align-items: center;">
+    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="decreaseQuantity(this, <%=c.getPrice()%>, <%=c.getCid()%>)">-</button>
+    
+   <input type="number" name="NOB_<%=c.getCid()%>" value="1" min="1"  max="<%=c.getStock()%>" 
+       style="width:50px; text-align:center; height:30px; margin: 0 2px;" 
+       id="quantity-<%=c.getCid()%>" readonly data-price="<%=c.getPrice()%>">
+       
+       
+
+    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="increaseQuantity(this, <%=c.getPrice()%>, <%=c.getCid()%>)">+</button>
+  </div>
+</td>
+
+<td>
+    <input type="hidden" value="<%=c.getStock()%>" readonly>
+</td>
+
+
+<td id="price-<%=c.getCid()%>"><%=c.getTotalPrice()%></td>
+<td>
+<a href="remove_book?bid=<%=c.getBid()%>&&uid=<%=c.getUid()%>&&cid=<%=c.getCid()%>" class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i></a>
+</td>
+    </tr>
+  <%}
+  
+  %>
+
+<tr>
+  <td>Total Price</td>
+  <td></td>
+  <td></td>
+  <td id="total-price"><%=totalPrice %></td>
+</tr>
+
+
+      </tbody>
+</table>
+</div>
+
+</div>
+</div>
+
+
+    <div class="form-group col-m-2 text-center">
+    <h3 class="text-center text-danger">Your detail order</h3>
+    
+     
+      <input type="hidden" class="form-control" value="${userobj.id}" name="id">
+    </div>
+ <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputEmail4">Name</label>
+      <input type="text" class="form-control" value="<%=u.getName()%>" name="username" readonly="readonly">
+    </div>
+    <div class="form-group col-md-6">
+      <label for="inputPassword4">Email</label>
+      <input type="text" class="form-control" value="<%=u.getEmail()%>" name="email"readonly="readonly" >
+    </div>
+    
+     <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputEmail4">Mobile Number</label>
+      <input type="number" class="form-control" value="<%=u.getPassword()%>" name="phno" readonly="readonly">
+    </div>
+    <div class="form-group col-md-6">
+      <label for="inputPassword4">Address</label>
+      <input type="text" class="form-control" name="address" required>
+    </div>
+  </div>
+  
+   <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputEmail4">Landmark</label>
+      <input type="text" class="form-control" name="landmark" required>
+    </div>
+    <div class="form-group col-md-6">
+      <label for="inputPassword4">City</label>
+      <input type="text" class="form-control" name="city" required>
+    </div>
+  </div>
+  
+   <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputEmail4">State</label>
+      <input type="text" class="form-control" name="state" required>
+    </div>
+    <div class="form-group col-md-6">
+      <label for="inputPassword4">Zip</label>
+      <input type="text" class="form-control" name="pincode" required>
+    </div>
+  </div>
+  
+  <div class="form-group col-md-6">
+  <label>Payment form</label>
+  <select class="form-control" name="paymentType" required>
+  <option value="noselect">-------select option---------</option>
+  <option value="gpay">gpay</option>
+    <option value="COD">Cash On Deleivey</option>
+  </select>
+  </div>
+  
+  </div>
+  <div class="text-center">
+  <button class="btn btn-warning">order now </button>
+  <a href="index.jsp" class="btn btn-warning">Continue Shopping</a>
+  </div>
+</form>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    let quantityInputs = document.querySelectorAll("[id^='quantity-']");
+    
+    quantityInputs.forEach(input => {
+        let cid = input.id.split("-")[1]; // Extract cart ID from input ID
+        let pricePerItem = parseFloat(input.getAttribute("data-price")); // Get price from attribute
+
+        if (!input.value || input.value < 1) {
+            input.value = 1; // Ensure default quantity is 1
+        }
+
+        updatePrice(cid, pricePerItem, 1); // Set initial price
+    });
+
+    updateTotalPrice(); // Recalculate total price on load
+});
+
+function increaseQuantity(button, price, cid) {
+    let input = button.previousElementSibling;
+    let value = parseInt(input.value, 10);
+    let maxStock = parseInt(input.getAttribute("max")); // Get max stock value
+
+    if (value < maxStock) {  // Ensure value does not exceed stock
+        input.value = value + 1;
+        updatePrice(cid, price, value + 1);
+    } else {
+        alert("You cannot add more than " + maxStock + " books."); // Show alert if stock limit is reached
+    }
+}
+
+function decreaseQuantity(button, price, cid) {
+    let input = button.nextElementSibling;
+    let value = parseInt(input.value, 10);
+
+    if (value > 1) {
+        input.value = value - 1;
+        updatePrice(cid, price, value - 1);
+    }
+}
+
+function updatePrice(cid, price, quantity) {
+    let priceElement = document.getElementById("price-" + cid);
+    let newPrice = price * quantity;
+    priceElement.innerText = newPrice.toFixed(2); // Update price
+
+    updateTotalPrice(); // Recalculate total price
+}
+
+function updateTotalPrice() {
+    let totalPrice = 0;
+    let priceElements = document.querySelectorAll("[id^='price-']");
+    
+    priceElements.forEach(priceEl => {
+        totalPrice += parseFloat(priceEl.innerText) || 0;
+    });
+
+    document.getElementById("total-price").innerText = totalPrice.toFixed(2);
+}
+
+</script>
+
+
+</body>
+</html>
